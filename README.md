@@ -11,9 +11,9 @@ then running the script will produce a csv file with the following content forma
 
  no | created | title | labels | assignee | state | estimate | actual
  ----- | ----- | ----- | ----- | ----- | ----- | -----:| -----:
- 3 | 2015-08-27T19:59:44Z | Some issue description | enhancement | some_user | open | 3 |
- 2 | 2015-08-27T19:56:39Z | Another issue description | enhancement,question | some_user | closed | 1 | 1
- 1 | 2015-08-27T17:47:20Z | Yet another project setup | bug | another_user | closed | 1.5 | 2
+ 3 | 2015-08-27T19:59:44Z | Some issue title | enhancement | some_user | open | 3 |
+ 2 | 2015-08-27T19:56:39Z | Another issue title | enhancement,question | some_user | closed | 1 | 1
+ 1 | 2015-08-27T17:47:20Z | Yet another issue title | bug | another_user | closed | 1.5 | 2
 
 ## Usage
 
