@@ -1,7 +1,7 @@
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 var fs = require('fs');
 
-var estimatedMarker = 'Estimate:';
+var estimateMarker = 'Estimate:';
 var actualMarker = 'Actual:';
 
 var accessToken = undefined;
@@ -40,7 +40,7 @@ if (!accessToken){
 
 var xmlhttp = new XMLHttpRequest();
 var url = 'https://api.github.com/repos/' + userOrOrganization +'/' + repo +'/issues?state=all&access_token=' + accessToken ;
-var headers = 'no;created;title;labels;assignee;state;estimated;actual';
+var headers = 'no;created;title;labels;assignee;state;estimate;actual';
 
 xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -99,7 +99,7 @@ function parseTickets(tickets) {
     fs.appendFileSync(outputFile, getLabels(tickets[i].labels) + ';');
     fs.appendFileSync(outputFile, tickets[i].assignee.login + ';');
     fs.appendFileSync(outputFile, tickets[i].state + ';');
-    fs.appendFileSync(outputFile, getTimeTracking(estimatedMarker, tickets[i].body) + ';');
+    fs.appendFileSync(outputFile, getTimeTracking(estimateMarker, tickets[i].body) + ';');
     fs.appendFileSync(outputFile, getTimeTracking(actualMarker, tickets[i].body) + '\r\n');
   }
 }

@@ -9,7 +9,7 @@ If issue description includes the following **separate** lines,
 
 then running the script will produce a csv file with the following content format
 
- no | created | title | labels | assignee | state | estimated | actual
+ no | created | title | labels | assignee | state | estimate | actual
  ----- | ----- | ----- | ----- | ----- | ----- | -----:| -----:
  3 | 2015-08-27T19:59:44Z | Some issue description | enhancement | some_user | open | 3 |
  2 | 2015-08-27T19:56:39Z | Another issue description | enhancement,question | some_user | closed | 1 | 1
@@ -27,4 +27,4 @@ folder.
 
 Issue the following command to run the script
 
-    node timeTracking.js [user or organization name] [repository name] [user access token]
+    node timeTracking.js [user name|organization name] [repository name] [user access token]
