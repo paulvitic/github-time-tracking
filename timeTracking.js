@@ -83,10 +83,10 @@ function getTimeTracking(marker, body) {
 
   var endIndex = body.indexOf('\r\n', startIndex + marker.length);
   if (endIndex === -1){
-    return body.substring(startIndex + marker.length);
+    return body.substring(startIndex + marker.length).trim();
   }
 
-  return body.substring(startIndex + marker.length, endIndex);
+  return body.substring(startIndex + marker.length, endIndex).trim();
 }
 
 function parseTickets(tickets) {
