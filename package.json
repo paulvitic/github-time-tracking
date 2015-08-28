@@ -1,0 +1,16 @@
+{
+  "name": "github-timetracking",
+  "version": "1.0.0",
+  "description": "Create time tracking data from tickets",
+  "main": "timeTracking.js",
+  "dependencies": {
+    "fs": "0.0.2",
+    "xmlhttprequest": "^1.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
