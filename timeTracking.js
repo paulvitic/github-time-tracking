@@ -1,32 +1,45 @@
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 var fs = require('fs');
 
+var estimatedMarker = 'Estimate:';
+var actualMarker = 'Actual:';
+
 var accessToken = undefined;
 var repo = undefined;
+var userOrOrganization = undefined;
 var outputFile = undefined;
 
 process.argv.forEach(function (val, index, array) {
   if (index === 2){
-    repo = val;
+    userOrOrganization = val;
   }
 
   if (index === 3){
+    repo = val;
+  }
+
+  if (index === 4){
     accessToken = val;
   }
 });
 
+if (!userOrOrganization){
+  console.log('First argument for user or organization may not be null!');
+  process.exit(1);
+}
+
 if (!repo){
-  console.log('First argument for repo name may not be null!');
+  console.log('Second argument for repo name may not be null!');
   process.exit(1);
 }
 
 if (!accessToken){
-  console.log('Second argument for user access token may not be null!');
+  console.log('Third argument for user access token may not be null!');
   process.exit(1);
 }
 
 var xmlhttp = new XMLHttpRequest();
-var url = 'https://api.github.com/repos/vektortelekom/' + repo +'/issues?state=all&access_token=' + accessToken ;
+var url = 'https://api.github.com/repos/' + userOrOrganization +'/' + repo +'/issues?state=all&access_token=' + accessToken ;
 var headers = 'no;created;title;labels;assignee;state;estimated;actual';
 
 xmlhttp.onreadystatechange = function() {
@@ -50,36 +63,43 @@ xmlhttp.open('GET', url, true);
 xmlhttp.send();
 
 function getLabels(labels){
-  return '';
+  var result = '';
+  if (labels && labels.length > 0){
+    for (var i = 0; i < labels.length; i++) {
+      result += labels[i].name;
+      if (i < labels.length-1) {
+        result += ',';
+      }
+    }
+  }
+  return result;
 }
 
-function getEstimated(body) {
-  return '';
-}
+function getTimeTracking(marker, body) {
+  var startIndex = body.indexOf(marker);
+  if (startIndex === -1) {
+    return '';
+  }
 
-function getActual(body){
-  return '';
+  var endIndex = body.indexOf('\r\n', startIndex + marker.length);
+  if (endIndex === -1){
+    return body.substring(startIndex + marker.length);
+  }
+
+  return body.substring(startIndex + marker.length, endIndex);
 }
 
 function parseTickets(tickets) {
   fs.writeFileSync(outputFile, headers + '\r\n') ;
 
   for(i = 0; i < tickets.length; i++) {
-
     fs.appendFileSync(outputFile, tickets[i].number + ';');
-
     fs.appendFileSync(outputFile, tickets[i].created_at + ';');
-
     fs.appendFileSync(outputFile, tickets[i].title + ';');
-
     fs.appendFileSync(outputFile, getLabels(tickets[i].labels) + ';');
-
     fs.appendFileSync(outputFile, tickets[i].assignee.login + ';');
-
     fs.appendFileSync(outputFile, tickets[i].state + ';');
-
-    fs.appendFileSync(outputFile, getEstimated(tickets[i].body) + ';');
-
-    fs.appendFileSync(outputFile, getActual(tickets[i].body) + '\r\n');
+    fs.appendFileSync(outputFile, getTimeTracking(estimatedMarker, tickets[i].body) + ';');
+    fs.appendFileSync(outputFile, getTimeTracking(actualMarker, tickets[i].body) + '\r\n');
   }
 }
