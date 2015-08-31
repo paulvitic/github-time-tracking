@@ -17,7 +17,7 @@ then running the script will produce a csv file with the following content forma
 
 ## Usage
 
-Requires node.js and npm packages installed.
+Requires node.js and npm installed.
 
 Clone the repository into a local folder and issue the following commands in the
 folder.
