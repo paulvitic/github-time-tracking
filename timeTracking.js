@@ -40,7 +40,7 @@ if (!accessToken){
 
 var xmlhttp = new XMLHttpRequest();
 var url = 'https://api.github.com/repos/' + userOrOrganization +'/' + repo +'/issues?state=all&access_token=' + accessToken ;
-var headers = 'no;created;title;labels;assignee;state;estimate;actual';
+var headers = 'no;created;title;milestone;labels;assignee;state;estimate;actual';
 
 xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -58,7 +58,8 @@ xmlhttp.onreadystatechange = function() {
           parseTickets(tickets);
         }
     }
-}
+};
+
 xmlhttp.open('GET', url, true);
 xmlhttp.send();
 
@@ -93,11 +94,29 @@ function parseTickets(tickets) {
   fs.writeFileSync(outputFile, headers + '\r\n') ;
 
   for(i = 0; i < tickets.length; i++) {
+
     fs.appendFileSync(outputFile, tickets[i].number + ';');
     fs.appendFileSync(outputFile, tickets[i].created_at + ';');
     fs.appendFileSync(outputFile, tickets[i].title + ';');
-    fs.appendFileSync(outputFile, getLabels(tickets[i].labels) + ';');
-    fs.appendFileSync(outputFile, tickets[i].assignee.login + ';');
+
+    if (tickets[i].milestone){
+      fs.appendFileSync(outputFile, tickets[i].milestone.title + ';');
+    } else {
+      fs.appendFileSync(outputFile, '' + ';');
+    }
+
+    if (tickets[i].labels){
+      fs.appendFileSync(outputFile, getLabels(tickets[i].labels) + ';');
+    } else {
+      fs.appendFileSync(outputFile, '' + ';');
+    }
+
+    if (tickets[i].assignee){
+      fs.appendFileSync(outputFile, tickets[i].assignee.login + ';');
+    } else {
+      fs.appendFileSync(outputFile, '' + ';');
+    }
+
     fs.appendFileSync(outputFile, tickets[i].state + ';');
     fs.appendFileSync(outputFile, getTimeTracking(estimateMarker, tickets[i].body) + ';');
     fs.appendFileSync(outputFile, getTimeTracking(actualMarker, tickets[i].body) + '\r\n');
